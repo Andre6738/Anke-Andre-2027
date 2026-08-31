@@ -321,3 +321,16 @@ if(rsvpForm){
 /* Admin-aanmelding is op 'n aparte bladsy (/admin), nie op hierdie gaste-bladsy nie.
    Hier inisialiseer ons net Firebase sodat RSVP's na Firestore geskryf kan word. */
 initFirebase();
+
+/* ============ SCROLL-ONTHULLING ============ */
+(function(){
+  if(!("IntersectionObserver" in window)) return;
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const sel = ".details .garland, .count .grid, .center-head, .tl-item, .cal-btn, .map-wrap, .map-actions, .photos .ph, .gift-card, .gift-lead, .gift-thanks, .faq-item, .rsvp .inner, .lodging-lead, .lodging-card";
+  const els = [...document.querySelectorAll(sel)];
+  els.forEach(el => el.classList.add("reveal"));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  els.forEach(el => io.observe(el));
+})();

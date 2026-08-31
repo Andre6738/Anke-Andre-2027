@@ -288,3 +288,44 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
 .dyn-row input:focus{outline:none;border-color:var(--green);}
 .rm-btn{background:none;border:1px solid #d8ccb4;color:var(--taupe-deep);width:44px;font-size:1.2rem;line-height:1;cursor:pointer;}
 .rm-btn:hover{border-color:#b56a5a;color:#b56a5a;}
+
+/* tydlyn-fotos (regte foto's) */
+.tl-photo .tl-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border:1px solid var(--line);}
+
+/* algemene vrae (FAQ) */
+.faq{padding:88px 40px;background:var(--ivory);border-top:1px solid var(--line);}
+.faq-list{max-width:720px;margin:0 auto;}
+.faq-item{border:1px solid var(--line);background:#fff;margin-bottom:12px;}
+.faq-item summary{list-style:none;cursor:pointer;padding:18px 48px 18px 20px;position:relative;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--green-deep);}
+.faq-item summary::-webkit-details-marker{display:none;}
+.faq-item summary::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-family:'Jost',sans-serif;font-size:1.4rem;color:var(--taupe-deep);line-height:1;}
+.faq-item[open] summary::after{content:"\2212";}
+.faq-item[open] summary{border-bottom:1px solid var(--line);}
+.faq-item p{padding:16px 20px 20px;color:var(--muted);font-size:.95rem;line-height:1.75;margin:0;}
+@media(max-width:760px){
+  .faq{padding:60px 22px;}
+  .faq-item summary{font-size:1.15rem;padding:16px 44px 16px 16px;}
+  .faq-item p{padding:14px 16px 18px;}
+}
+
+/* scroll-onthullingsanimasie (word slegs deur JS geaktiveer; geen JS = alles sigbaar) */
+@media (prefers-reduced-motion: no-preference){
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .tl-item.reveal{transform:translateY(32px);}
+}
+
+/* oornag / akkommodasie */
+.lodging{padding:88px 40px;background:var(--cream);border-top:1px solid var(--line);}
+.lodging-lead{max-width:720px;margin:0 auto 34px;text-align:center;color:var(--muted);line-height:1.85;}
+.lodging-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:0 auto;}
+.lodging-card{background:var(--ivory);border:1px solid var(--line);padding:28px 26px;}
+.lodging-card h3{font-size:1.5rem;color:var(--green-deep);margin-bottom:10px;}
+.lodging-card p{color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:16px;}
+.lodging-link{display:inline-block;font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;font-weight:600;color:var(--green-deep);text-decoration:none;border-bottom:1px solid var(--green-soft);padding-bottom:3px;}
+.lodging-link:hover{color:var(--green);}
+@media(max-width:760px){
+  .lodging{padding:60px 22px;}
+  .lodging-cards{grid-template-columns:1fr;}
+  .lodging-card{padding:22px 20px;}
+}

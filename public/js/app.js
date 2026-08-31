@@ -176,6 +176,7 @@ initCalendar();
 //     bywoon:      "ja" | "nee",
 //     aantalGaste: number,
 //     dieet:       string,
+//     liedjie:     string,   // liedjie-voorstel
 //     boodskap:    string,
 //     geskepOp:    Timestamp (serverTimestamp)
 //   }
@@ -248,6 +249,7 @@ if(rsvpForm){
       bywoon: rsvpForm.bywoon.value,
       aantalGaste: parseInt(rsvpForm.aantalGaste.value, 10) || 1,
       dieet: rsvpForm.dieet.value.trim(),
+      liedjie: rsvpForm.liedjie.value.trim(),
       boodskap: rsvpForm.boodskap.value.trim()
     };
     if(!data.naam || !data.epos){
@@ -272,125 +274,6 @@ if(rsvpForm){
   });
 }
 
-/* ============ 5. ADMIN ============ */
-const modal = document.getElementById("admin-modal");
-const openAdmin = document.getElementById("open-admin");
-const closeAdmin = document.getElementById("close-admin");
-const adminForm = document.getElementById("admin-form");
-const adminMsg = document.getElementById("admin-msg");
-const adminLoginView = document.getElementById("admin-login");
-const adminPanel = document.getElementById("admin-panel");
-const configNote = document.getElementById("admin-config-note");
-
-if(configNote){
-  configNote.textContent = FIREBASE_READY
-    ? "Gekoppel aan Firebase. Meld aan met jou admin e-pos en wagwoord."
-    : "Demo-modus: Firebase is nog nie gekonfigureer nie. Meld aan met enige e-pos en wagwoord om die plaaslike demo-antwoorde te sien. Regte aanmelding word aktief sodra Firebase gekoppel is.";
-}
-
-function openModal(){ modal.classList.add("open"); }
-function closeModal(){ modal.classList.remove("open"); }
-if(openAdmin) openAdmin.addEventListener("click", openModal);
-if(closeAdmin) closeAdmin.addEventListener("click", closeModal);
-if(modal) modal.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
-
-function isAllowedAdmin(email){
-  const list = window.ADMIN_EMAILS || [];
-  if(!list.length) return true;
-  return list.map(x => x.toLowerCase()).includes((email || "").toLowerCase());
-}
-
-function renderRows(records){
-  const tbody = document.getElementById("rsvp-rows");
-  tbody.innerHTML = "";
-  let ja = 0, nee = 0, gaste = 0;
-  records.forEach(r => {
-    if(r.bywoon === "ja"){ ja++; gaste += (r.aantalGaste || 0); } else { nee++; }
-    const tr = document.createElement("tr");
-    const by = r.bywoon === "ja" ? "Ja" : "Nee";
-    tr.innerHTML =
-      `<td>${esc(r.naam)}</td>`+
-      `<td>${esc(r.epos)}</td>`+
-      `<td>${by}</td>`+
-      `<td>${r.aantalGaste != null ? r.aantalGaste : ""}</td>`+
-      `<td>${esc(r.dieet || "")}</td>`+
-      `<td>${esc(r.boodskap || "")}</td>`;
-    tbody.appendChild(tr);
-  });
-  document.getElementById("stat-total").textContent = records.length;
-  document.getElementById("stat-ja").textContent = ja;
-  document.getElementById("stat-nee").textContent = nee;
-  document.getElementById("stat-gaste").textContent = gaste;
-}
-function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;" }[c])); }
-
-async function loadRsvps(){
-  if(fb){
-    const q = fb.query(fb.collection(fb.db, "rsvps"), fb.orderBy("geskepOp", "desc"));
-    const snap = await fb.getDocs(q);
-    return snap.docs.map(d => d.data());
-  }
-  return demoLoad();
-}
-
-function showPanel(email){
-  adminLoginView.style.display = "none";
-  adminPanel.style.display = "block";
-  document.getElementById("admin-user").textContent =
-    (fb ? "Aangemeld as " : "Demo-modus - ") + (email || "");
-  loadRsvps().then(renderRows).catch(err => {
-    console.error(err);
-  });
-}
-function showLogin(){
-  adminPanel.style.display = "none";
-  adminLoginView.style.display = "block";
-}
-
-if(adminForm){
-  adminForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("a-epos").value.trim();
-    const wag = document.getElementById("a-wag").value;
-    if(!email || !wag){
-      showMsg(adminMsg, "Vul asseblief e-pos en wagwoord in.", false);
-      return;
-    }
-    if(fb){
-      try{
-        const cred = await fb.signIn(fb.auth, email, wag);
-        if(!isAllowedAdmin(cred.user.email)){
-          showMsg(adminMsg, "Hierdie rekening het nie admin-toegang nie.", false);
-          await fb.signOut(fb.auth);
-          return;
-        }
-        adminMsg.className = "form-msg";
-        showPanel(cred.user.email);
-      }catch(err){
-        showMsg(adminMsg, "Aanmelding het misluk. Kontroleer jou besonderhede.", false);
-      }
-    }else{
-      // Demo: aanvaar enige besonderhede en wys plaaslike antwoorde
-      adminMsg.className = "form-msg";
-      showPanel(email);
-    }
-  });
-}
-
-const adminSignout = document.getElementById("admin-signout");
-if(adminSignout){
-  adminSignout.addEventListener("click", async () => {
-    if(fb){ try{ await fb.signOut(fb.auth); }catch(e){} }
-    showLogin();
-  });
-}
-
-/* Init Firebase (indien gekonfigureer) en hou aanmeldstatus dop */
-initFirebase().then(inst => {
-  if(inst && inst.auth){
-    inst.onAuth(inst.auth, user => {
-      if(user && isAllowedAdmin(user.email)){ showPanel(user.email); }
-      else { showLogin(); }
-    });
-  }
-});
+/* Admin-aanmelding is op 'n aparte bladsy (/admin), nie op hierdie gaste-bladsy nie.
+   Hier inisialiseer ons net Firebase sodat RSVP's na Firestore geskryf kan word. */
+initFirebase();

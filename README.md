@@ -107,3 +107,28 @@ Of installeer die Firebase CLI en gebruik `firebase emulators:start` sodra die p
 - Regte foto's vir die foto-afdeling.
 - Firebase: aktiveer Firestore en Authentication, skep die admin-gebruiker, bevestig die admin-e-pos, en voeg NET die `FIREBASE_SERVICE_ACCOUNT` secret in GitHub by. (Web-konfig en projek-ID is reeds ingevul; projek-ID is hard gekodeer, geen CI-variable nodig nie.)
 - Bevestig die RSVP-sperdatum (31 Mei 2028, drie maande voor die troue, sodat daar tyd is om vervangers te nooi as gaste bedank).
+
+## Opdaterings (admin, Google, kaart, geskenke, liedjie)
+
+- Admin-aanmelding is nou op 'n APARTE bladsy: `/admin` (public/admin/index.html).
+  Dit is nie op die gaste-bladsy nie. Meld aan met Google of met e-pos/wagwoord.
+- Slegs e-posse in `ADMIN_EMAILS` (config.js) kry toegang. Firestore-reels laat
+  ook net daardie e-pos toe om die `rsvps` te lees.
+- RSVP-vorm het nou 'n "Liedjie-voorstel" veld (`liedjie`); dit wys in die admin-lys.
+- "Plek" afdeling met 'n ingebedde Google Maps kaart en 'n "Maak oop in Google Maps"
+  knoppie. Die kaart soek tans op die naam "La Merveille Function Venue".
+- "Geskenke" afdeling: teenwoordigheid is die grootste geskenk, met bankbesonderhede
+  vir wie wil bydra.
+
+### André moet nog
+
+1. Firebase Authentication: aktiveer die GOOGLE sign-in provider (Authentication >
+   Sign-in method), bo-op Email/Password. Skep die admin-gebruiker vir die e-pos in
+   ADMIN_EMAILS.
+2. Authentication > Settings > Authorized domains: voeg `anke-andre-2027.web.app`
+   by sodat Google-aanmelding op die live webwerf werk.
+3. Vervang die plekhouer-bankbesonderhede in `public/index.html` (afdeling "Geskenke")
+   met die regte rekeningbesonderhede.
+4. Opsioneel: as die kaart nie die presiese plek wys nie, vervang die soek-navraag in
+   die `<iframe>` en die "Maak oop in Google Maps" skakel met die venue se presiese
+   adres of koordinate.

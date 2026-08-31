@@ -3,12 +3,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // RSVP-antwoorde.
-    // - Enigeen mag 'n RSVP skep (die publieke vorm).
-    // - Slegs aangemelde gebruikers (die admin/gasheer) mag lees.
-    // - Niemand mag via die kliënt opdateer of verwyder nie.
+    // - Enigeen mag 'n geldige RSVP skep (die publieke vorm).
+    // - Slegs die admin (e-pos in die lys hieronder) mag lees.
+    // - Niemand mag via die klient opdateer of verwyder nie.
     match /rsvps/{doc} {
       allow create: if isValidRsvp(request.resource.data);
-      allow read: if request.auth != null;
+      allow read: if request.auth != null
+                  && request.auth.token.email in ['andrec06112001@gmail.com'];
       allow update, delete: if false;
     }
 
@@ -19,6 +20,7 @@ service cloud.firestore {
           && d.aantalGaste is int && d.aantalGaste >= 0 && d.aantalGaste < 30
           && d.selfoon is string
           && d.dieet is string
+          && d.liedjie is string && d.liedjie.size() < 300
           && d.boodskap is string && d.boodskap.size() < 1000;
     }
   }

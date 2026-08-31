@@ -17,3 +17,7 @@ serviceAccount.json
 *firebase-adminsdk*.json
 *-adminsdk-*.json
 serviceAccount*.json
+
+# plaaslike push-helper (moenie commit nie)
+_push.bat
+_push_result.txt

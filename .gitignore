@@ -12,3 +12,8 @@ serviceAccount.json
 *.serviceaccount.json
 .env
 .env.*
+
+# Firebase diensrekening-sleutels (GEHEIM - nooit commit nie)
+*firebase-adminsdk*.json
+*-adminsdk-*.json
+serviceAccount*.json

@@ -9,19 +9,19 @@
 /* ==================================================================
    ENIGSTE PLEK OM DIE TROUE-BESONDERHEDE TE VERANDER
    ------------------------------------------------------------------
-   Die datum (28 Augustus 2028) is korrek en bevestig.
+   Die datum (28 Augustus 2027) is korrek en bevestig.
    Die TYD (14:00) is 'n PLEKHOUER en word nog bevestig.
    Verander net WEDDING.tyd hieronder sodra André die regte tyd gee,
    en beide die aftel-teller EN die kalender-gebeurtenis werk reg.
 ================================================================== */
 const WEDDING = {
-  datum: "2028-08-28",            // 28 Augustus 2028 (bevestig)
+  datum: "2027-08-28",            // 28 Augustus 2027 (bevestig)
   tyd: "14:00",                   // PLEKHOUER - verander SLEGS hier wanneer bekend
   tydsoneOffset: "+02:00",        // SAST (Suid-Afrika, geen somertyd)
   duurUre: 5,                     // geskatte duur vir die kalender-gebeurtenis
   titel: "André en Anke se troue",
   plek: "La Merveille Function Venue",
-  rsvpSperdatum: "31 Mei 2028"
+  rsvpSperdatum: "31 Mei 2027"
 };
 // Aftel-teller mik na die presiese oomblik in SAST, ongeag die kyker se tydsone.
 const WEDDING_DATE = new Date(`${WEDDING.datum}T${WEDDING.tyd}:00${WEDDING.tydsoneOffset}`).getTime();
@@ -46,7 +46,7 @@ setInterval(tickCountdown, 1000);
 // wys, ongeag die kyker se tydsone (die tyd is 'n plekhouer vir 'n plaaslike
 // geleentheid). Verander WEDDING.tyd om dit reg te stel.
 
-function calStart(){ // {ymd:"20280828", hms:"140000"}
+function calStart(){ // {ymd:"20270828", hms:"140000"}
   const [Y,M,D] = WEDDING.datum.split("-");
   const [h,m] = WEDDING.tyd.split(":");
   return { ymd: `${Y}${M}${D}`, hms: `${pad(h,2)}${pad(m,2)}00`, Y, M, D, h:parseInt(h,10), m:parseInt(m,10) };

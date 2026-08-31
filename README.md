@@ -22,7 +22,7 @@ wedding-site-final/
 
 ## Kenmerke
 
-- Lewende aftel-teller na 28 Augustus 2028 (14:00 is 'n plekhouer-tyd).
+- Lewende aftel-teller na 28 Augustus 2027 (14:00 is 'n plekhouer-tyd).
 - "Voeg by jou kalender" afdeling: .ics aflaai (iPhone/Apple, Outlook desktop), Google Kalender skakel, en Outlook web skakel. Dit bespeur die toestel en wys die mees relevante opsie eerste (Apple op iOS, Google op Android) en werk op iPhone.
 - Datum en tyd word op EEN plek gestel: die `WEDDING` konstante boaan `public/js/app.js`. Verander net `WEDDING.tyd` sodra die regte tyd bekend is, en beide die teller en die kalender-gebeurtenis werk reg.
 - "Ons vier oomblikke" tydlyn (vier momente, plekhouer-teks).
@@ -106,7 +106,7 @@ Of installeer die Firebase CLI en gebruik `firebase emulators:start` sodra die p
 - Presiese tyd van die seremonie/onthaal (tans "Word bevestig"; die teller gebruik 14:00 as plekhouer).
 - Regte foto's vir die foto-afdeling.
 - Firebase: aktiveer Firestore en Authentication, skep die admin-gebruiker, bevestig die admin-e-pos, en voeg NET die `FIREBASE_SERVICE_ACCOUNT` secret in GitHub by. (Web-konfig en projek-ID is reeds ingevul; projek-ID is hard gekodeer, geen CI-variable nodig nie.)
-- Bevestig die RSVP-sperdatum (31 Mei 2028, drie maande voor die troue, sodat daar tyd is om vervangers te nooi as gaste bedank).
+- Bevestig die RSVP-sperdatum (31 Mei 2027, drie maande voor die troue, sodat daar tyd is om vervangers te nooi as gaste bedank).
 
 ## Opdaterings (admin, Google, kaart, geskenke, liedjie)
 

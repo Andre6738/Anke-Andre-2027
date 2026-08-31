@@ -329,3 +329,7 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
   .lodging-cards{grid-template-columns:1fr;}
   .lodging-card{padding:22px 20px;}
 }
+
+/* oornag-kaarte: lyn die Google Maps skakel onderaan op */
+.lodging-card{display:flex;flex-direction:column;}
+.lodging-card .lodging-link{margin-top:auto;align-self:flex-start;}

@@ -87,30 +87,33 @@ async function loadRsvps(){
 function renderRows(records){
   const tbody = document.getElementById("rsvp-rows");
   tbody.innerHTML = "";
-  let ja = 0, nee = 0, gaste = 0;
+  let ja = 0, nee = 0, mense = 0;
   records.forEach(r => {
-    if(r.bywoon === "ja"){ ja++; gaste += (r.aantalGaste || 0); } else { nee++; }
+    const gasteArr = Array.isArray(r.gaste) ? r.gaste : [];
+    const liedjies = Array.isArray(r.liedjies) ? r.liedjies : (r.liedjie ? [r.liedjie] : []);
+    if(r.bywoon === "ja"){ ja++; mense += (1 + gasteArr.length); } else { nee++; }
     const tr = document.createElement("tr");
     const by = r.bywoon === "ja" ? "Ja" : "Nee";
+    const gasteStr = gasteArr.map(g => esc(((g.naam || "") + " " + (g.van || "")).trim())).join("<br>") || "-";
+    const liedjieStr = liedjies.map(s => esc(s)).join("<br>") || "-";
     tr.innerHTML =
-      `<td>${esc(r.naam)}</td>`+
-      `<td>${esc(r.epos)}</td>`+
+      `<td>${esc(r.naam || "")}</td>`+
+      `<td>${esc(r.van || "")}</td>`+
+      `<td>${esc(r.selfoon || "")}</td>`+
       `<td>${by}</td>`+
-      `<td>${r.aantalGaste != null ? r.aantalGaste : ""}</td>`+
-      `<td>${esc(r.dieet || "")}</td>`+
-      `<td>${esc(r.liedjie || "")}</td>`+
-      `<td>${esc(r.boodskap || "")}</td>`;
+      `<td>${gasteStr}</td>`+
+      `<td>${liedjieStr}</td>`;
     tbody.appendChild(tr);
   });
   if(!records.length){
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="7" style="text-align:center;color:#8a7657;">Geen RSVP's nog nie.</td>`;
+    tr.innerHTML = `<td colspan="6" style="text-align:center;color:#8a7657;">Geen RSVP's nog nie.</td>`;
     tbody.appendChild(tr);
   }
   document.getElementById("stat-total").textContent = records.length;
   document.getElementById("stat-ja").textContent = ja;
   document.getElementById("stat-nee").textContent = nee;
-  document.getElementById("stat-gaste").textContent = gaste;
+  document.getElementById("stat-gaste").textContent = mense;
 }
 
 /* ---------- sign in / out ---------- */

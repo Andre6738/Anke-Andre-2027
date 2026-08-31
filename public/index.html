@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
 <title>André &amp; Anke | 28 Augustus 2028</title>
 <meta name="description" content="André en Anke gaan trou op 28 Augustus 2028 by La Merveille Onthaalplek. RSVP aanlyn.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,15 +31,9 @@
     <div class="names script">André<span class="amp">&amp;</span>Anke</div>
     <div class="date serif">28 Augustus 2028</div>
     <div class="venue">La Merveille Onthaalplek &nbsp;&middot;&nbsp; Tyd word bevestig</div>
-    <img class="garland" src="assets/img/garland.png" alt="Eucalyptus en wit rose">
-    <div class="meta-row">
-      <div class="cell"><div class="k">28 Augustus 2028</div><div class="l">Die Datum</div></div>
-      <div class="cell"><div class="k">La Merveille</div><div class="l">Onthaalplek</div></div>
-      <div class="cell"><div class="k">Word bevestig</div><div class="l">Tyd</div></div>
-    </div>
   </section>
 
-  <!-- COUNTDOWN -->
+  <!-- COUNTDOWN (hoog op, direk na die datum en plek) -->
   <section class="count">
     <div class="label">Ons trou oor</div>
     <h2>Nog net 'n rukkie saam</h2>
@@ -47,6 +42,15 @@
       <div class="u"><div class="n" id="cd-h">00</div><div class="t">Ure</div></div>
       <div class="u"><div class="n" id="cd-m">00</div><div class="t">Minute</div></div>
       <div class="u"><div class="n" id="cd-s">00</div><div class="t">Sekondes</div></div>
+    </div>
+  </section>
+
+  <!-- BESONDERHEDE (garland en datum/plek/tyd) -->
+  <section class="details">
+    <img class="garland" src="assets/img/garland.png" alt="Eucalyptus en wit rose">
+    <div class="meta-row">
+      <div class="cell"><div class="k">28 Augustus 2028</div><div class="l">Die Datum</div></div>
+      <div class="cell"><div class="k">La Merveille</div><div class="l">Onthaalplek</div></div>
     </div>
   </section>
 
@@ -62,17 +66,18 @@
       <a class="cal-btn" id="cal-apple" href="#" rel="noopener">
         <span class="cal-main">Apple / iPhone</span>
         <span class="cal-sub">.ics aflaai</span>
-        <span class="rec">Aanbeveel</span>
+      </a>
+      <a class="cal-btn" id="cal-android" href="#" rel="noopener">
+        <span class="cal-main">Android</span>
+        <span class="cal-sub">Google, Samsung of enige kalender</span>
       </a>
       <a class="cal-btn" id="cal-google" href="#" target="_blank" rel="noopener">
         <span class="cal-main">Google Kalender</span>
         <span class="cal-sub">Open in Google</span>
-        <span class="rec">Aanbeveel</span>
       </a>
       <a class="cal-btn" id="cal-outlook" href="#" target="_blank" rel="noopener">
         <span class="cal-main">Outlook</span>
         <span class="cal-sub">Office web</span>
-        <span class="rec">Aanbeveel</span>
       </a>
     </div>
     <p class="cal-note">Tyd (14:00) is 'n plekhouer en word nog bevestig.</p>
@@ -178,27 +183,30 @@
       <p class="deadline">Antwoord asseblief teen 31 Mei 2028</p>
       <form id="rsvp-form" novalidate>
         <div class="two">
-          <div><label for="f-naam">Naam en van</label><input id="f-naam" name="naam" type="text" placeholder="Jou volle naam" required></div>
-          <div><label for="f-epos">E-posadres</label><input id="f-epos" name="epos" type="email" placeholder="jou@epos.co.za" required></div>
+          <div><label for="f-naam">Naam</label><input id="f-naam" name="naam" type="text" placeholder="Jou naam" required></div>
+          <div><label for="f-van">Van</label><input id="f-van" name="van" type="text" placeholder="Jou van" required></div>
         </div>
-        <div class="two">
-          <div><label for="f-selfoon">Selfoonnommer</label><input id="f-selfoon" name="selfoon" type="tel" placeholder="082 000 0000"></div>
-          <div><label for="f-bywoon">Sal jy bywoon?</label>
-            <select id="f-bywoon" name="bywoon">
-              <option value="ja">Ja, met graagte</option>
-              <option value="nee">Nee, ongelukkig nie</option>
-            </select>
-          </div>
+        <label for="f-selfoon">Selfoonnommer</label>
+        <input id="f-selfoon" name="selfoon" type="tel" placeholder="082 000 0000" required>
+
+        <label>Sal jy bywoon?</label>
+        <div class="attend-btns" id="attend-btns">
+          <button type="button" class="attend-btn is-on" data-val="ja">Ja, ons sal daar wees</button>
+          <button type="button" class="attend-btn" data-val="nee">Nee, ek kan nie maak nie</button>
         </div>
-        <div class="two">
-          <div><label for="f-gaste">Aantal gaste</label><input id="f-gaste" name="aantalGaste" type="number" min="1" value="1"></div>
-          <div><label for="f-dieet">Dieetvereistes</label><input id="f-dieet" name="dieet" type="text" placeholder="Bv. vegetaries"></div>
+        <input type="hidden" id="f-bywoon" name="bywoon" value="ja">
+
+        <div id="guest-block">
+          <label>Gaste wat saam kom (naam en van)</label>
+          <div id="guest-list"></div>
+          <button type="button" class="add-btn" id="add-guest">+ Voeg gas by</button>
         </div>
-        <label for="f-liedjie">Liedjie-voorstel</label>
-        <input id="f-liedjie" name="liedjie" type="text" placeholder="Watter liedjie moet ons speel?">
-        <label for="f-boodskap">Boodskap vir die paartjie</label>
-        <textarea id="f-boodskap" name="boodskap" rows="3" placeholder="Jou boodskap..."></textarea>
-        <button class="btn" type="submit">Stuur RSVP</button>
+
+        <label>Liedjie-versoeke</label>
+        <div id="song-list"></div>
+        <button type="button" class="add-btn" id="add-song">+ Voeg liedjie by</button>
+
+        <button class="btn" type="submit" style="margin-top:26px;">Stuur RSVP</button>
         <div class="form-msg" id="rsvp-msg"></div>
       </form>
     </div>

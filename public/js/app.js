@@ -146,39 +146,28 @@ function initCalendar(){
   const wrap = document.getElementById("cal-buttons");
   if(!wrap) return;
   const apple = document.getElementById("cal-apple");
+  const android = document.getElementById("cal-android");
   const google = document.getElementById("cal-google");
   const outlook = document.getElementById("cal-outlook");
+  // Apple en Android laai albei die .ics af (Android open die kalender-kieser).
   if(apple){ apple.setAttribute("href", icsDataUri()); apple.setAttribute("download", "andre-en-anke.ics"); }
+  if(android){ android.setAttribute("href", icsDataUri()); android.setAttribute("download", "andre-en-anke.ics"); }
   if(google){ google.setAttribute("href", googleUrl()); }
   if(outlook){ outlook.setAttribute("href", outlookUrl()); }
-
-  // Rangskik die mees relevante opsie eerste en merk dit "Aanbeveel".
-  const platform = detectPlatform();
-  let order = [apple, google, outlook]; // .ics eerste werk oral (verstek)
-  if(platform === "android") order = [google, apple, outlook];
-  else if(platform === "ios" || platform === "mac") order = [apple, google, outlook];
-  order = order.filter(Boolean);
-  order.forEach((btn, i) => {
-    wrap.appendChild(btn);
-    btn.classList.toggle("primary", i === 0);
-    const badge = btn.querySelector(".rec");
-    if(badge) badge.style.display = (i === 0) ? "inline" : "none";
-  });
+  // Alle knoppies is dieselfde wit styl, geen aanbeveling nie.
 }
 initCalendar();
 
 /* ============ 2. FIREBASE (opsioneel) ============ */
 // Firestore data-struktuur vir 'n RSVP dokument (versameling: "rsvps"):
 //   {
-//     naam:        string,   // volle naam en van
-//     epos:        string,
-//     selfoon:     string,
-//     bywoon:      "ja" | "nee",
-//     aantalGaste: number,
-//     dieet:       string,
-//     liedjie:     string,   // liedjie-voorstel
-//     boodskap:    string,
-//     geskepOp:    Timestamp (serverTimestamp)
+//     naam:     string,
+//     van:      string,
+//     selfoon:  string,
+//     bywoon:   "ja" | "nee",
+//     gaste:    [ { naam: string, van: string } ],   // bykomende gaste
+//     liedjies: [ string ],                          // liedjie-versoeke
+//     geskepOp: Timestamp (serverTimestamp)
 //   }
 const cfg = window.FIREBASE_CONFIG || {};
 const FIREBASE_READY = !!(cfg.apiKey && cfg.projectId);
@@ -240,33 +229,88 @@ function showMsg(el, text, ok){
   el.className = "form-msg " + (ok ? "ok" : "err");
 }
 if(rsvpForm){
+  // Bywoon: twee keuse-knoppies
+  const bywoonInput = document.getElementById("f-bywoon");
+  document.querySelectorAll("#attend-btns .attend-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#attend-btns .attend-btn").forEach(b => b.classList.remove("is-on"));
+      btn.classList.add("is-on");
+      if(bywoonInput) bywoonInput.value = btn.dataset.val;
+    });
+  });
+
+  // Gaste byvoeg / verwyder (elk met naam en van)
+  const guestList = document.getElementById("guest-list");
+  function addGuestRow(){
+    const row = document.createElement("div");
+    row.className = "dyn-row";
+    row.innerHTML =
+      '<input type="text" class="g-naam" placeholder="Naam">' +
+      '<input type="text" class="g-van" placeholder="Van">' +
+      '<button type="button" class="rm-btn" aria-label="Verwyder gas">&times;</button>';
+    row.querySelector(".rm-btn").addEventListener("click", () => row.remove());
+    guestList.appendChild(row);
+  }
+  const addGuestBtn = document.getElementById("add-guest");
+  if(addGuestBtn) addGuestBtn.addEventListener("click", addGuestRow);
+
+  // Liedjies byvoeg / verwyder (meer as een)
+  const songList = document.getElementById("song-list");
+  function addSongRow(){
+    const row = document.createElement("div");
+    row.className = "dyn-row";
+    row.innerHTML =
+      '<input type="text" class="s-naam" placeholder="Liedjie">' +
+      '<input type="text" class="s-art" placeholder="Kunstenaar (opsioneel)">' +
+      '<button type="button" class="rm-btn" aria-label="Verwyder liedjie">&times;</button>';
+    row.querySelector(".rm-btn").addEventListener("click", () => row.remove());
+    songList.appendChild(row);
+  }
+  const addSongBtn = document.getElementById("add-song");
+  if(addSongBtn) addSongBtn.addEventListener("click", addSongRow);
+
+  function collectGuests(){
+    return [...guestList.querySelectorAll(".dyn-row")].map(r => ({
+      naam: r.querySelector(".g-naam").value.trim(),
+      van: r.querySelector(".g-van").value.trim()
+    })).filter(g => g.naam || g.van);
+  }
+  function collectSongs(){
+    return [...songList.querySelectorAll(".dyn-row")].map(r => {
+      const naam = r.querySelector(".s-naam").value.trim();
+      const art = r.querySelector(".s-art").value.trim();
+      if(!naam) return "";
+      return art ? (naam + " - " + art) : naam;
+    }).filter(Boolean);
+  }
+
   rsvpForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = {
       naam: rsvpForm.naam.value.trim(),
-      epos: rsvpForm.epos.value.trim(),
+      van: rsvpForm.van.value.trim(),
       selfoon: rsvpForm.selfoon.value.trim(),
-      bywoon: rsvpForm.bywoon.value,
-      aantalGaste: parseInt(rsvpForm.aantalGaste.value, 10) || 1,
-      dieet: rsvpForm.dieet.value.trim(),
-      liedjie: rsvpForm.liedjie.value.trim(),
-      boodskap: rsvpForm.boodskap.value.trim()
+      bywoon: (bywoonInput && bywoonInput.value) || "ja",
+      gaste: collectGuests(),
+      liedjies: collectSongs()
     };
-    if(!data.naam || !data.epos){
-      showMsg(rsvpMsg, "Vul asseblief jou naam en e-posadres in.", false);
+    if(!data.naam || !data.van || !data.selfoon){
+      showMsg(rsvpMsg, "Vul asseblief jou naam, van en selfoonnommer in.", false);
       return;
     }
     try{
       if(fb){
-        await fb.addDoc(fb.collection(fb.db, "rsvps"), {
-          ...data, geskepOp: fb.serverTimestamp()
-        });
+        await fb.addDoc(fb.collection(fb.db, "rsvps"), { ...data, geskepOp: fb.serverTimestamp() });
       }else{
         demoAdd({ ...data, geskepOp: new Date().toISOString() });
       }
       const woord = data.bywoon === "ja" ? "Ons sien uit daarna om jou te sien." : "Ons sal jou mis, dankie dat jy laat weet het.";
-      showMsg(rsvpMsg, "Dankie, " + data.naam.split(" ")[0] + "! Jou RSVP is ontvang. " + woord, true);
+      showMsg(rsvpMsg, "Dankie, " + data.naam + "! Jou RSVP is ontvang. " + woord, true);
       rsvpForm.reset();
+      guestList.innerHTML = "";
+      songList.innerHTML = "";
+      document.querySelectorAll("#attend-btns .attend-btn").forEach(b => b.classList.toggle("is-on", b.dataset.val === "ja"));
+      if(bywoonInput) bywoonInput.value = "ja";
     }catch(err){
       console.error(err);
       showMsg(rsvpMsg, "Iets het verkeerd geloop. Probeer asseblief weer.", false);

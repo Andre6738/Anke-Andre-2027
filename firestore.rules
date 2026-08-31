@@ -14,14 +14,12 @@ service cloud.firestore {
     }
 
     function isValidRsvp(d) {
-      return d.naam is string && d.naam.size() > 0 && d.naam.size() < 120
-          && d.epos is string && d.epos.size() < 200
+      return d.naam is string && d.naam.size() > 0 && d.naam.size() < 80
+          && d.van is string && d.van.size() > 0 && d.van.size() < 80
+          && d.selfoon is string && d.selfoon.size() > 0 && d.selfoon.size() < 40
           && d.bywoon in ['ja', 'nee']
-          && d.aantalGaste is int && d.aantalGaste >= 0 && d.aantalGaste < 30
-          && d.selfoon is string
-          && d.dieet is string
-          && d.liedjie is string && d.liedjie.size() < 300
-          && d.boodskap is string && d.boodskap.size() < 1000;
+          && d.gaste is list && d.gaste.size() < 30
+          && d.liedjies is list && d.liedjies.size() < 30;
     }
   }
 }

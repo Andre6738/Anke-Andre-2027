@@ -253,3 +253,38 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
   .tl-content{margin-top:14px;}
   .tl-num{left:23px;top:0;transform:translate(-50%,0);width:40px;height:40px;font-size:1.25rem;box-shadow:0 0 0 5px var(--ivory);}
 }
+
+/* besonderhede-afdeling (garland en datum/plek/tyd, onder die teller) */
+.details{padding:44px 40px 14px;text-align:center;background:var(--ivory);}
+.details .garland{margin:0 auto 6px;max-width:520px;width:74%;display:block;}
+
+/* mobiel: verwyder die boonste balk heeltemal */
+@media(max-width:760px){
+  .topbar{display:none !important;}
+  .details{padding:28px 22px 6px;}
+}
+
+/* teller: al vier eenhede op EEN ry op mobiel */
+@media(max-width:760px){
+  .count{padding:42px 14px;}
+  .count .grid{flex-wrap:nowrap;gap:0;}
+  .count .u{flex:1;min-width:0;padding:0 4px;}
+  .count .n{font-size:1.7rem;}
+  .count .t{font-size:.52rem;letter-spacing:.1em;margin-top:6px;}
+}
+
+/* bywoon-knoppies (twee keuses) */
+.attend-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2px;}
+.attend-btn{padding:14px 12px;border:1px solid #d8ccb4;background:#fff;color:var(--ink);font-family:'Jost',sans-serif;font-size:.92rem;cursor:pointer;transition:border-color .15s, background .15s, color .15s;text-align:center;}
+.attend-btn:hover{border-color:var(--green);}
+.attend-btn.is-on{background:var(--green-deep);border-color:var(--green-deep);color:var(--ivory);}
+
+/* gaste / liedjie byvoeg */
+#guest-block{margin-top:6px;}
+.add-btn{margin-top:10px;width:100%;background:none;border:1px dashed var(--taupe);color:var(--taupe-deep);font-family:'Jost',sans-serif;font-size:.8rem;letter-spacing:.06em;padding:12px 16px;cursor:pointer;transition:border-color .15s, color .15s;}
+.add-btn:hover{border-color:var(--green);color:var(--green);}
+.dyn-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-top:10px;align-items:stretch;}
+.dyn-row input{width:100%;padding:12px;border:1px solid #d8ccb4;background:#fff;font-family:'Jost',sans-serif;font-size:.92rem;color:var(--ink);}
+.dyn-row input:focus{outline:none;border-color:var(--green);}
+.rm-btn{background:none;border:1px solid #d8ccb4;color:var(--taupe-deep);width:44px;font-size:1.2rem;line-height:1;cursor:pointer;}
+.rm-btn:hover{border-color:#b56a5a;color:#b56a5a;}

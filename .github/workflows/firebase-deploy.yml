@@ -1,0 +1,43 @@
+name: Deploy na Firebase Hosting
+
+# Ontplooi outomaties wanneer daar na main gepush word.
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kry die kode
+        uses: actions/checkout@v4
+
+      - name: Stel Node op
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installeer Firebase CLI
+        run: npm install -g firebase-tools
+
+      # Die diensrekening-sleutel word as 'n GitHub secret gestoor:
+      #   Repo > Settings > Secrets and variables > Actions > New secret
+      #   Naam: FIREBASE_SERVICE_ACCOUNT   Waarde: die volledige JSON
+      - name: Skryf diensrekening-sleutel
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$HOME/serviceAccount.json"
+
+      - name: Ontplooi Hosting en Firestore-reels
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /home/runner/serviceAccount.json
+        # Projek-ID is hard gekodeer. Die enigste ding wat in GitHub bygevoeg
+        # moet word, is die FIREBASE_SERVICE_ACCOUNT secret.
+        run: |
+          firebase deploy \
+            --only hosting,firestore:rules,firestore:indexes \
+            --project anke-andre-4ddcd \
+            --non-interactive
+
+      - name: Vee sleutel uit
+        if: always()
+        run: rm -f "$HOME/serviceAccount.json"

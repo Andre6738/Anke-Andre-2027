@@ -1,0 +1,14 @@
+# Afhanklikhede
+node_modules/
+
+# Firebase
+.firebase/
+*-debug.log
+firebase-debug.log
+firestore-debug.log
+
+# Geheime - MOENIE commit nie
+serviceAccount.json
+*.serviceaccount.json
+.env
+.env.*

@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // RSVP-antwoorde.
+    // - Enigeen mag 'n RSVP skep (die publieke vorm).
+    // - Slegs aangemelde gebruikers (die admin/gasheer) mag lees.
+    // - Niemand mag via die kliënt opdateer of verwyder nie.
+    match /rsvps/{doc} {
+      allow create: if isValidRsvp(request.resource.data);
+      allow read: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    function isValidRsvp(d) {
+      return d.naam is string && d.naam.size() > 0 && d.naam.size() < 120
+          && d.epos is string && d.epos.size() < 200
+          && d.bywoon in ['ja', 'nee']
+          && d.aantalGaste is int && d.aantalGaste >= 0 && d.aantalGaste < 30
+          && d.selfoon is string
+          && d.dieet is string
+          && d.boodskap is string && d.boodskap.size() < 1000;
+    }
+  }
+}

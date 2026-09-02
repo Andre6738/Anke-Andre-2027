@@ -9,14 +9,13 @@
 /* ==================================================================
    ENIGSTE PLEK OM DIE TROUE-BESONDERHEDE TE VERANDER
    ------------------------------------------------------------------
-   Die datum (28 Augustus 2027) is korrek en bevestig.
-   Die TYD (14:00) is 'n PLEKHOUER en word nog bevestig.
-   Verander net WEDDING.tyd hieronder sodra André die regte tyd gee,
-   en beide die aftel-teller EN die kalender-gebeurtenis werk reg.
+   Die datum (28 Augustus 2027) en tyd (16:00) is korrek en bevestig.
+   Verander net die waardes hieronder indien nodig, en beide die
+   aftel-teller EN die kalender-gebeurtenis werk outomaties reg.
 ================================================================== */
 const WEDDING = {
   datum: "2027-08-28",            // 28 Augustus 2027 (bevestig)
-  tyd: "14:00",                   // PLEKHOUER - verander SLEGS hier wanneer bekend
+  tyd: "16:00",                   // Seremonie begin 16:00 (bevestig). Gaste gesit teen 15:30.
   tydsoneOffset: "+02:00",        // SAST (Suid-Afrika, geen somertyd)
   duurUre: 5,                     // geskatte duur vir die kalender-gebeurtenis
   titel: "André en Anke se troue",
@@ -42,11 +41,10 @@ setInterval(tickCountdown, 1000);
 
 /* ============ 1b. VOEG BY KALENDER ============ */
 // Bou 'n gebeurtenis wat op iPhone/Apple, Google, Outlook en Android werk.
-// Ons gebruik "swewende" (floating) tyd sodat 14:00 op elke toestel as 14:00
-// wys, ongeag die kyker se tydsone (die tyd is 'n plekhouer vir 'n plaaslike
-// geleentheid). Verander WEDDING.tyd om dit reg te stel.
+// Ons gebruik "swewende" (floating) tyd sodat 16:00 op elke toestel as 16:00
+// wys, ongeag die kyker se tydsone (dit is 'n plaaslike geleentheid).
 
-function calStart(){ // {ymd:"20270828", hms:"140000"}
+function calStart(){ // {ymd:"20270828", hms:"160000"}
   const [Y,M,D] = WEDDING.datum.split("-");
   const [h,m] = WEDDING.tyd.split(":");
   return { ymd: `${Y}${M}${D}`, hms: `${pad(h,2)}${pad(m,2)}00`, Y, M, D, h:parseInt(h,10), m:parseInt(m,10) };
@@ -58,8 +56,8 @@ function calEnd(){
   return { ymd: s.ymd, hms: `${pad(endH,2)}${pad(s.m,2)}00`, h:endH, m:s.m };
 }
 const CAL_DESC = "André en Anke gaan trou by " + WEDDING.plek + ". "
-  + "RSVP asseblief teen " + WEDDING.rsvpSperdatum + ". "
-  + "Let wel: die tyd (" + WEDDING.tyd + ") is 'n plekhouer en word nog bevestig.";
+  + "Die seremonie begin om " + WEDDING.tyd + ". Gaste moet asseblief teen 15:30 gesit wees. "
+  + "RSVP asseblief teen " + WEDDING.rsvpSperdatum + ".";
 
 // ICS lyne moet met CRLF geskei word en lang lyne word gevou (RFC 5545).
 function icsFold(line){
@@ -86,7 +84,7 @@ function buildICS(){
     "BEGIN:VEVENT",
     "UID:andre-anke-" + s.ymd + "@wedding.local",
     "DTSTAMP:" + stamp,
-    // Swewende tyd (geen Z, geen TZID): wys 14:00 op enige toestel.
+    // Swewende tyd (geen Z, geen TZID): wys 16:00 op enige toestel.
     "DTSTART:" + s.ymd + "T" + s.hms,
     "DTEND:" + e.ymd + "T" + e.hms,
     "SUMMARY:" + icsEscape(WEDDING.titel),

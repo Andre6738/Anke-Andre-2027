@@ -140,15 +140,15 @@
   <section class="photos" id="foto">
     <div class="center-head">
       <div class="script">Herinneringe</div>
-      <h2>Foto's volg binnekort</h2>
+      <h2>Ons oomblikke saam</h2>
     </div>
-    <div class="pgrid">
-      <div class="ph"><span>Foto volg</span></div>
-      <div class="ph"><span>Foto volg</span></div>
-      <div class="ph"><span>Foto volg</span></div>
-      <div class="ph"><span>Foto volg</span></div>
-      <div class="ph"><span>Foto volg</span></div>
-      <div class="ph"><span>Foto volg</span></div>
+    <div class="pgrid" id="gallery">
+      <button class="ph gphoto" type="button" data-i="0"><img src="assets/img/foto-1.jpg" alt="Anke en André saam" loading="lazy"></button>
+      <button class="ph gphoto" type="button" data-i="1"><img src="assets/img/foto-2.jpg" alt="Anke en André saam" loading="lazy"></button>
+      <button class="ph gphoto" type="button" data-i="2"><img src="assets/img/foto-3.jpg" alt="Anke en André saam" loading="lazy"></button>
+      <button class="ph gphoto" type="button" data-i="3"><img src="assets/img/foto-4.jpg" alt="Anke en André saam" loading="lazy"></button>
+      <button class="ph gphoto" type="button" data-i="4"><img src="assets/img/foto-5.jpg" alt="Anke en André saam" loading="lazy"></button>
+      <button class="ph gphoto" type="button" data-i="5"><img src="assets/img/foto-6.jpg" alt="Anke en André saam" loading="lazy"></button>
     </div>
   </section>
 
@@ -252,7 +252,15 @@
     <div class="fd">28 Augustus 2027 &nbsp;&middot;&nbsp; La Merveille Onthaalplek</div>
   </footer>
 
-  <div class="ph-note">Voorbeeld-inhoud &middot; RSVP-datum aanpasbaar &middot; Foto's volg</div>
+  <div class="ph-note">Voorbeeld-inhoud &middot; RSVP-datum aanpasbaar</div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Foto">
+    <button class="lb-close" id="lb-close" type="button" aria-label="Maak toe">&times;</button>
+    <button class="lb-nav lb-prev" id="lb-prev" type="button" aria-label="Vorige">&#8249;</button>
+    <figure class="lb-figure"><img class="lb-img" id="lb-img" src="" alt=""></figure>
+    <button class="lb-nav lb-next" id="lb-next" type="button" aria-label="Volgende">&#8250;</button>
+    <div class="lb-count" id="lb-count"></div>
+  </div>
 
   <script src="js/config.js"></script>
   <script type="module" src="js/app.js"></script>

@@ -332,3 +332,48 @@ initFirebase();
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
   els.forEach(el => io.observe(el));
 })();
+
+(function(){
+  const gallery = document.getElementById("gallery");
+  const lb = document.getElementById("lightbox");
+  if(!gallery || !lb) return;
+  const imgEl = document.getElementById("lb-img");
+  const countEl = document.getElementById("lb-count");
+  const btns = [...gallery.querySelectorAll(".gphoto")];
+  const srcs = btns.map(b => b.querySelector("img").getAttribute("src"));
+  let idx = 0;
+  function show(i){
+    idx = (i + srcs.length) % srcs.length;
+    imgEl.setAttribute("src", srcs[idx]);
+    countEl.textContent = (idx + 1) + " / " + srcs.length;
+  }
+  function open(i){
+    show(i);
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+  function close(){
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+  btns.forEach((b, i) => b.addEventListener("click", () => open(i)));
+  document.getElementById("lb-close").addEventListener("click", close);
+  document.getElementById("lb-prev").addEventListener("click", () => show(idx - 1));
+  document.getElementById("lb-next").addEventListener("click", () => show(idx + 1));
+  lb.addEventListener("click", (e) => { if(e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if(!lb.classList.contains("open")) return;
+    if(e.key === "Escape") close();
+    else if(e.key === "ArrowLeft") show(idx - 1);
+    else if(e.key === "ArrowRight") show(idx + 1);
+  });
+  let sx = 0, sy = 0;
+  lb.addEventListener("touchstart", (e) => { const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+  lb.addEventListener("touchend", (e) => {
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(idx + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+})();

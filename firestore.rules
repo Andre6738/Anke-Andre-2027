@@ -4,13 +4,17 @@ service cloud.firestore {
 
     // RSVP-antwoorde.
     // - Enigeen mag 'n geldige RSVP skep (die publieke vorm).
-    // - Slegs die admin (e-pos in die lys hieronder) mag lees.
-    // - Niemand mag via die klient opdateer of verwyder nie.
+    // - Slegs die admin (e-pos in die lys hieronder) mag lees, opdateer en verwyder.
     match /rsvps/{doc} {
-      allow create: if isValidRsvp(request.resource.data);
-      allow read: if request.auth != null
-                  && request.auth.token.email in ['andrec06112001@gmail.com'];
-      allow update, delete: if false;
+      allow create: if isValidRsvp(request.resource.data) || isAdmin();
+      allow read:   if isAdmin();
+      allow update: if isAdmin() && isValidRsvp(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    function isAdmin(){
+      return request.auth != null
+          && request.auth.token.email in ['andrec06112001@gmail.com'];
     }
 
     function isValidRsvp(d) {

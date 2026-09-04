@@ -6,6 +6,8 @@
    Geen em-strepe. Afrikaans.
 ------------------------------------------------------------------ */
 
+import { wysSukses, wysFout } from "./swal-tema.js?v=20260904";
+
 /* ==================================================================
    ENIGSTE PLEK OM DIE TROUE-BESONDERHEDE TE VERANDER
    ------------------------------------------------------------------
@@ -172,6 +174,7 @@ const FIREBASE_READY = !!(cfg.apiKey && cfg.projectId);
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2";
 
 let fb = null; // { app, auth, db, fns... }
+let firebaseGereed = null;
 
 async function initFirebase(){
   if(!FIREBASE_READY) return null;
@@ -222,6 +225,7 @@ function demoAdd(rec){
 /* ============ 4. RSVP VORM ============ */
 const rsvpForm = document.getElementById("rsvp-form");
 const rsvpMsg = document.getElementById("rsvp-msg");
+function escHtml(t){ return String(t).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;" }[c])); }
 function showMsg(el, text, ok){
   el.textContent = text;
   el.className = "form-msg " + (ok ? "ok" : "err");
@@ -296,29 +300,56 @@ if(rsvpForm){
       showMsg(rsvpMsg, "Vul asseblief jou naam, van en selfoonnommer in.", false);
       return;
     }
+    const stuurBtn = rsvpForm.querySelector('button[type="submit"]');
+    const btnTeks = stuurBtn ? stuurBtn.textContent : "";
+    if(stuurBtn){ stuurBtn.disabled = true; stuurBtn.textContent = "Besig om te stuur..."; }
+
     try{
+      // Wag dat Firebase klaar laai sodat ons nooit 'n RSVP stilweg net
+      // plaaslik stoor terwyl Firestore wel beskikbaar is nie.
+      if(firebaseGereed) await firebaseGereed;
+
       if(fb){
         await fb.addDoc(fb.collection(fb.db, "rsvps"), { ...data, geskepOp: fb.serverTimestamp() });
+      }else if(FIREBASE_READY){
+        // Firebase is gekonfigureer maar kon nie laai nie: moenie voorgee dit het gewerk nie.
+        throw new Error("Firestore is nie beskikbaar nie.");
       }else{
         demoAdd({ ...data, geskepOp: new Date().toISOString() });
       }
-      const woord = data.bywoon === "ja" ? "Ons sien uit daarna om jou te sien." : "Ons sal jou mis, dankie dat jy laat weet het.";
+
+      const woord = data.bywoon === "ja"
+        ? "Ons sien uit daarna om jou by ons troue te sien."
+        : "Ons sal jou mis, maar dankie dat jy laat weet het.";
       showMsg(rsvpMsg, "Dankie, " + data.naam + "! Jou RSVP is ontvang. " + woord, true);
+
       rsvpForm.reset();
       guestList.innerHTML = "";
       songList.innerHTML = "";
       document.querySelectorAll("#attend-btns .attend-btn").forEach(b => b.classList.toggle("is-on", b.dataset.val === "ja"));
       if(bywoonInput) bywoonInput.value = "ja";
+
+      await wysSukses(
+        "Jou RSVP is gestuur",
+        "<strong>Dankie, " + escHtml(data.naam) + "!</strong><br>Ons het jou antwoord ontvang en veilig gestoor. " + woord,
+        "RSVP bevestig"
+      );
     }catch(err){
       console.error(err);
       showMsg(rsvpMsg, "Iets het verkeerd geloop. Probeer asseblief weer.", false);
+      await wysFout(
+        "Jou RSVP is nie gestuur nie",
+        "Ons kon jou antwoord nie stoor nie. Kontroleer asseblief jou internetverbinding en probeer weer.<br>As dit aanhou, laat weet ons gerus direk."
+      );
+    }finally{
+      if(stuurBtn){ stuurBtn.disabled = false; stuurBtn.textContent = btnTeks; }
     }
   });
 }
 
 /* Admin-aanmelding is op 'n aparte bladsy (/admin), nie op hierdie gaste-bladsy nie.
    Hier inisialiseer ons net Firebase sodat RSVP's na Firestore geskryf kan word. */
-initFirebase();
+firebaseGereed = initFirebase();
 
 /* ============ SCROLL-ONTHULLING ============ */
 (function(){

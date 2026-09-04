@@ -127,9 +127,6 @@ footer{background:var(--green-deep);color:var(--sage);text-align:center;padding:
 footer .fm{font-family:'Pinyon Script',cursive;font-size:2.6rem;color:var(--ivory);line-height:1;margin-bottom:8px;}
 footer .fd{font-size:.8rem;letter-spacing:.06em;}
 
-/* placeholder note */
-.ph-note{background:var(--ink);color:#e9e1cf;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:8px;}
-
 /* admin modal */
 .modal{position:fixed;inset:0;background:rgba(44,47,42,.6);display:none;align-items:center;justify-content:center;z-index:60;padding:20px;}
 .modal.open{display:flex;}
@@ -337,4 +334,68 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
   .lb-nav{width:44px;height:44px;font-size:1.9rem;}
   .lb-prev{left:6px;}
   .lb-next{right:6px;}
+}
+
+/* ---- SweetAlert2 in die troue-tema (eucalyptus, wit rose, skerp hoeke) ---- */
+.swal2-container{backdrop-filter:blur(3px);}
+.swal2-popup.aa-swal{background:var(--ivory);border:1px solid var(--line);box-shadow:0 24px 60px rgba(68,84,60,.18);padding:34px 30px 30px;font-family:'Jost',sans-serif;color:var(--ink);width:min(94vw,460px);}
+.swal2-popup.aa-swal .swal2-title{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:2rem;line-height:1.2;color:var(--green-deep);padding:0;margin:0 0 6px;}
+.swal2-popup.aa-swal .swal2-html-container{font-family:'Jost',sans-serif;font-weight:300;font-size:.98rem;line-height:1.7;color:var(--muted);margin:6px 0 0;padding:0;}
+.swal2-popup.aa-swal .aa-swal-eyebrow{font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:.3em;font-size:.62rem;color:var(--taupe-deep);margin-bottom:12px;}
+.swal2-popup.aa-swal .aa-swal-rule{width:64px;height:1px;background:var(--sage);margin:16px auto 0;}
+.swal2-popup.aa-swal .swal2-actions{margin-top:26px;gap:10px;width:100%;}
+.swal2-popup.aa-swal .swal2-actions button{margin:0;padding:14px 26px;font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:.24em;font-size:.72rem;font-weight:400;box-shadow:none;cursor:pointer;transition:background .2s,border-color .2s,color .2s;}
+.swal2-popup.aa-swal .swal2-confirm{background:var(--green-deep);color:var(--ivory);border:1px solid var(--green-deep);}
+.swal2-popup.aa-swal .swal2-confirm:hover{background:var(--green);border-color:var(--green);}
+.swal2-popup.aa-swal .swal2-cancel{background:#fff;color:var(--ink);border:1px solid #d8ccb4;}
+.swal2-popup.aa-swal .swal2-cancel:hover{border-color:var(--green);color:var(--green-deep);}
+.swal2-popup.aa-swal .swal2-deny{background:#8a3b2e;color:var(--ivory);border:1px solid #8a3b2e;}
+.swal2-popup.aa-swal .swal2-actions button:focus{outline:none;box-shadow:0 0 0 2px var(--sage);}
+/* Die tema dwing skerp hoeke af, so SweetAlert2 se ronde masker-elemente
+   (wat die merkie tydens die animasie versteek) moet weg. */
+.swal2-popup.aa-swal .swal2-icon{margin:4px auto 18px;border-width:1px;}
+.swal2-popup.aa-swal .swal2-success-circular-line-left,
+.swal2-popup.aa-swal .swal2-success-circular-line-right,
+.swal2-popup.aa-swal .swal2-success-fix,
+.swal2-popup.aa-swal .swal2-icon.swal2-success .swal2-success-ring{display:none;}
+.swal2-popup.aa-swal .swal2-icon.swal2-success{border-color:var(--green-soft);color:var(--green);}
+.swal2-popup.aa-swal .swal2-icon.swal2-success [class^='swal2-success-line']{background-color:var(--green);display:block;}
+.swal2-popup.aa-swal .swal2-icon.swal2-error{border-color:#d8a99e;color:#8a3b2e;}
+.swal2-popup.aa-swal .swal2-icon.swal2-error [class^='swal2-x-mark-line']{background-color:#8a3b2e;}
+.swal2-popup.aa-swal .swal2-icon.swal2-warning{border-color:var(--taupe);color:var(--taupe-deep);}
+.swal2-popup.aa-swal .swal2-icon.swal2-question{border-color:var(--green-soft);color:var(--green);}
+.swal2-popup.aa-swal .swal2-icon.swal2-info{border-color:var(--green-soft);color:var(--green);}
+.swal2-popup.aa-swal .swal2-timer-progress-bar{background:var(--sage);}
+.swal2-popup.aa-swal .swal2-close{color:var(--taupe-deep);font-family:'Jost',sans-serif;transition:color .2s;}
+.swal2-popup.aa-swal .swal2-close:hover{color:var(--green-deep);}
+.swal2-popup.aa-swal .swal2-validation-message{background:#f3e3df;color:#8a3b2e;font-family:'Jost',sans-serif;font-size:.84rem;}
+@media(max-width:760px){
+  .swal2-popup.aa-swal{padding:26px 20px 22px;width:calc(100vw - 32px);}
+  .swal2-popup.aa-swal .swal2-title{font-size:1.6rem;}
+  .swal2-popup.aa-swal .swal2-actions{flex-direction:column-reverse;}
+  .swal2-popup.aa-swal .swal2-actions button{width:100%;}
+}
+
+/* ---- admin: RSVP bestuur (byvoeg, wysig, verwyder) ---- */
+.admin-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin:22px 0 14px;}
+.admin-toolbar .tb-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--green-deep);}
+.btn-sm{padding:11px 20px;background:var(--green-deep);color:var(--ivory);border:1px solid var(--green-deep);font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:.2em;font-size:.68rem;cursor:pointer;transition:background .2s;width:auto;margin:0;}
+.btn-sm:hover{background:var(--green);border-color:var(--green);}
+.btn-sm.ghost{background:#fff;color:var(--ink);border:1px solid #d8ccb4;}
+.btn-sm.ghost:hover{border-color:var(--green);color:var(--green-deep);}
+.rsvp-table td.acts{white-space:nowrap;}
+.row-btn{padding:7px 12px;margin:2px 4px 2px 0;background:#fff;border:1px solid #d8ccb4;color:var(--ink);font-family:'Jost',sans-serif;font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;cursor:pointer;transition:border-color .2s,color .2s;}
+.row-btn:hover{border-color:var(--green);color:var(--green-deep);}
+.row-btn.danger:hover{border-color:#c08375;color:#8a3b2e;}
+.aa-form{text-align:left;}
+.aa-form label{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.2em;color:var(--taupe-deep);margin:14px 0 6px;}
+.aa-form input,.aa-form select,.aa-form textarea{width:100%;padding:12px 13px;border:1px solid #d8ccb4;background:#fff;font-family:'Jost',sans-serif;font-size:.94rem;color:var(--ink);line-height:1.5;resize:vertical;}
+.aa-form input:focus,.aa-form select:focus,.aa-form textarea:focus{outline:none;border-color:var(--green);}
+.aa-form .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.aa-form .two label{margin-top:14px;}
+.aa-form .hint{font-size:.72rem;color:var(--taupe-deep);margin-top:6px;font-style:italic;letter-spacing:.02em;}
+@media(max-width:760px){
+  .admin-toolbar{flex-direction:column;align-items:stretch;}
+  .admin-toolbar .btn-sm{width:100%;}
+  .aa-form .two{grid-template-columns:1fr;}
 }

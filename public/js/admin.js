@@ -3,10 +3,25 @@
    - Meld aan met Google (popup, met terugval na herlei) of e-pos/wagwoord
    - Wys, voeg by, wysig en verwyder RSVP's in Firestore
    Slegs e-posse in window.ADMIN_EMAILS kry toegang.
-   Geen em-strepe. Afrikaans.
+
+   LET WEL: die admin-portaal se teks is in ENGELS (dit is net vir die
+   paartjie). Die gaste-bladsy bly in Afrikaans.
+   Geen em-strepe.
 ------------------------------------------------------------------ */
 
-import { wysSukses, wysFout, wysInfo, vraBevestig, swalBeskikbaar, swalBasis } from "./swal-tema.js?v=20260904";
+import { wysSukses, wysFout, wysInfo, vraBevestig, swalBeskikbaar, swalBasis, stelEtikette } from "./swal-tema.js?v=20260904b";
+
+stelEtikette({
+  suksesEyebrow: "Done",
+  suksesKnoppie: "OK",
+  foutEyebrow: "Something went wrong",
+  foutKnoppie: "Try again",
+  infoEyebrow: "Note",
+  infoKnoppie: "OK",
+  bevestigEyebrow: "Please confirm",
+  bevestigKnoppie: "Delete",
+  kanselleerKnoppie: "Cancel"
+});
 
 const cfg = window.FIREBASE_CONFIG || {};
 const FIREBASE_READY = !!(cfg.apiKey && cfg.projectId);
@@ -67,30 +82,29 @@ function clearMsg(){ const el = document.getElementById("admin-msg"); el.textCon
 function demoLoad(){ try{ return JSON.parse(localStorage.getItem(DEMO_KEY) || "[]"); }catch(e){ return []; } }
 function demoSave(list){ try{ localStorage.setItem(DEMO_KEY, JSON.stringify(list)); }catch(e){} }
 
-/* Verduidelik Firebase se foutkodes in gewone Afrikaans. */
 function authFoutTeks(err){
   const kode = (err && err.code) || "";
   const gasheer = window.location.hostname;
   switch(kode){
     case "auth/unauthorized-domain":
-      return "Hierdie domein (" + gasheer + ") is nie in Firebase se lys van gemagtigde domeine nie. "
-           + "Voeg dit by in die Firebase-konsole onder Authentication, Settings, Authorized domains.";
+      return "This domain (" + gasheer + ") is not on Firebase's list of authorised domains. "
+           + "Add it in the Firebase console under Authentication, Settings, Authorized domains.";
     case "auth/operation-not-allowed":
-      return "Google-aanmelding is nie vir hierdie projek geaktiveer nie. "
-           + "Aktiveer dit in die Firebase-konsole onder Authentication, Sign-in method.";
+      return "Google sign-in is not enabled for this project. "
+           + "Enable it in the Firebase console under Authentication, Sign-in method.";
     case "auth/popup-closed-by-user":
     case "auth/cancelled-popup-request":
-      return "Die aanmeld-venster is toegemaak voordat jy klaar was. Probeer gerus weer.";
+      return "The sign-in window was closed before you finished. Please try again.";
     case "auth/network-request-failed":
-      return "Ons kon nie aan Firebase koppel nie. Kontroleer jou internetverbinding en probeer weer.";
+      return "We could not reach Firebase. Check your internet connection and try again.";
     case "auth/invalid-credential":
     case "auth/wrong-password":
     case "auth/user-not-found":
-      return "Die e-pos of wagwoord is verkeerd. Kontroleer asseblief jou besonderhede.";
+      return "That email or password is incorrect. Please check your details.";
     case "auth/too-many-requests":
-      return "Te veel pogings. Wag 'n oomblik en probeer weer.";
+      return "Too many attempts. Wait a moment and try again.";
     default:
-      return "Aanmelding het misluk" + (kode ? " (" + kode + ")" : "") + ". Probeer asseblief weer.";
+      return "Login failed" + (kode ? " (" + kode + ")" : "") + ". Please try again.";
   }
 }
 function popupGeblokkeer(err){
@@ -110,7 +124,7 @@ function showPanel(email){
   document.getElementById("admin-login").style.display = "none";
   document.getElementById("admin-panel").style.display = "block";
   document.getElementById("admin-user").textContent =
-    (fb ? "Aangemeld as " : "Demo-modus - ") + (email || "");
+    (fb ? "Signed in as " : "Demo mode - ") + (email || "");
   herlaai();
 }
 
@@ -121,7 +135,7 @@ async function herlaai(){
   }catch(err){
     console.error(err);
     document.getElementById("admin-user").textContent =
-      "Kon nie die lys laai nie: " + ((err && err.code) || "onbekende fout") + ".";
+      "Could not load the list: " + ((err && err.code) || "unknown error") + ".";
   }
 }
 
@@ -153,25 +167,26 @@ function renderRows(records){
     const liedjies = Array.isArray(r.liedjies) ? r.liedjies : (r.liedjie ? [r.liedjie] : []);
     if(r.bywoon === "ja"){ ja++; mense += (1 + gasteArr.length); } else { nee++; }
     const tr = document.createElement("tr");
-    const by = r.bywoon === "ja" ? "Ja" : "Nee";
+    const by = r.bywoon === "ja" ? "Yes" : "No";
     const gasteStr = gasteArr.map(g => esc(((g.naam || "") + " " + (g.van || "")).trim())).join("<br>") || "-";
     const liedjieStr = liedjies.map(s => esc(s)).join("<br>") || "-";
     tr.innerHTML =
-      `<td>${esc(r.naam || "")}</td>`+
-      `<td>${esc(r.van || "")}</td>`+
-      `<td>${esc(r.selfoon || "")}</td>`+
-      `<td>${by}</td>`+
-      `<td>${gasteStr}</td>`+
-      `<td>${liedjieStr}</td>`+
-      `<td class="acts">`+
-        `<button class="row-btn" data-wysig="${esc(r.id)}" type="button">Wysig</button>`+
-        `<button class="row-btn danger" data-verwyder="${esc(r.id)}" type="button">Verwyder</button>`+
+      `<td data-label="Name">${esc(r.naam || "")}</td>`+
+      `<td data-label="Surname">${esc(r.van || "")}</td>`+
+      `<td data-label="Phone">${esc(r.selfoon || "")}</td>`+
+      `<td data-label="Attending"><span class="pill ${r.bywoon === "ja" ? "ja" : "nee"}">${by}</span></td>`+
+      `<td data-label="Guests">${gasteStr}</td>`+
+      `<td data-label="Songs">${liedjieStr}</td>`+
+      `<td class="acts" data-label="Actions">`+
+        `<button class="row-btn" data-wysig="${esc(r.id)}" type="button">Edit</button>`+
+        `<button class="row-btn danger" data-verwyder="${esc(r.id)}" type="button">Delete</button>`+
       `</td>`;
     tbody.appendChild(tr);
   });
   if(!records.length){
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="7" style="text-align:center;color:#8a7657;">Geen RSVP's nog nie.</td>`;
+    tr.className = "leeg-ry";
+    tr.innerHTML = `<td class="leeg" colspan="7">No RSVPs yet.</td>`;
     tbody.appendChild(tr);
   }
   document.getElementById("stat-total").textContent = records.length;
@@ -203,22 +218,22 @@ function vormHtml(r){
   return `
     <div class="aa-form">
       <div class="two">
-        <div><label for="e-naam">Naam</label><input id="e-naam" type="text" value="${esc(r.naam || "")}" maxlength="79" placeholder="Naam"></div>
-        <div><label for="e-van">Van</label><input id="e-van" type="text" value="${esc(r.van || "")}" maxlength="79" placeholder="Van"></div>
+        <div><label for="e-naam">Name</label><input id="e-naam" type="text" value="${esc(r.naam || "")}" maxlength="79" placeholder="Name"></div>
+        <div><label for="e-van">Surname</label><input id="e-van" type="text" value="${esc(r.van || "")}" maxlength="79" placeholder="Surname"></div>
       </div>
-      <label for="e-selfoon">Selfoonnommer</label>
+      <label for="e-selfoon">Phone number</label>
       <input id="e-selfoon" type="tel" value="${esc(r.selfoon || "")}" maxlength="39" placeholder="082 000 0000">
-      <label for="e-bywoon">Sal hulle bywoon?</label>
+      <label for="e-bywoon">Attending?</label>
       <select id="e-bywoon">
-        <option value="ja"${r.bywoon !== "nee" ? " selected" : ""}>Ja, hulle sal daar wees</option>
-        <option value="nee"${r.bywoon === "nee" ? " selected" : ""}>Nee, hulle kan nie maak nie</option>
+        <option value="ja"${r.bywoon !== "nee" ? " selected" : ""}>Yes, they will be there</option>
+        <option value="nee"${r.bywoon === "nee" ? " selected" : ""}>No, they cannot make it</option>
       </select>
-      <label for="e-gaste">Gaste wat saam kom</label>
-      <textarea id="e-gaste" rows="3" placeholder="Een gas per lyn: Naam Van">${esc(gasteNaTeks(r.gaste))}</textarea>
-      <div class="hint">Een gas per lyn, naam en van.</div>
-      <label for="e-liedjies">Liedjie-versoeke</label>
-      <textarea id="e-liedjies" rows="3" placeholder="Een liedjie per lyn">${esc(liedjieTeks)}</textarea>
-      <div class="hint">Een liedjie per lyn.</div>
+      <label for="e-gaste">Guests coming along</label>
+      <textarea id="e-gaste" rows="3" placeholder="One guest per line: Name Surname">${esc(gasteNaTeks(r.gaste))}</textarea>
+      <div class="hint">One guest per line, name and surname.</div>
+      <label for="e-liedjies">Song requests</label>
+      <textarea id="e-liedjies" rows="3" placeholder="One song per line">${esc(liedjieTeks)}</textarea>
+      <div class="hint">One song per line.</div>
     </div>`;
 }
 
@@ -227,11 +242,11 @@ function leesVorm(){
   const van = document.getElementById("e-van").value.trim();
   const selfoon = document.getElementById("e-selfoon").value.trim();
   if(!naam || !van || !selfoon){
-    window.Swal.showValidationMessage("Vul asseblief naam, van en selfoonnommer in.");
+    window.Swal.showValidationMessage("Please fill in name, surname and phone number.");
     return false;
   }
   if(naam.length >= 80 || van.length >= 80 || selfoon.length >= 40){
-    window.Swal.showValidationMessage("Een van die velde is te lank.");
+    window.Swal.showValidationMessage("One of the fields is too long.");
     return false;
   }
   return {
@@ -244,15 +259,15 @@ function leesVorm(){
 
 async function vraRsvpVorm(titel, rekord){
   if(!swalBeskikbaar()){
-    await wysInfo("Nie beskikbaar nie", "Die venster kon nie laai nie. Herlaai asseblief die bladsy.");
+    await wysInfo("Not available", "The dialog could not load. Please reload the page.");
     return null;
   }
   const r = await window.Swal.fire(swalBasis({
     title: titel,
     html: vormHtml(rekord),
     showCancelButton: true,
-    confirmButtonText: "Stoor",
-    cancelButtonText: "Kanselleer",
+    confirmButtonText: "Save",
+    cancelButtonText: "Cancel",
     focusConfirm: false,
     preConfirm: leesVorm
   }));
@@ -260,7 +275,7 @@ async function vraRsvpVorm(titel, rekord){
 }
 
 async function voegRsvpBy(){
-  const data = await vraRsvpVorm("Voeg RSVP by", null);
+  const data = await vraRsvpVorm("Add RSVP", null);
   if(!data) return;
   try{
     if(fb){
@@ -271,17 +286,17 @@ async function voegRsvpBy(){
       demoSave(lys);
     }
     await herlaai();
-    await wysSukses("RSVP bygevoeg", "<strong>" + esc(data.naam) + " " + esc(data.van) + "</strong> is by die lys gevoeg.", "Gestoor");
+    await wysSukses("RSVP added", "<strong>" + esc(data.naam) + " " + esc(data.van) + "</strong> has been added to the list.", "Saved");
   }catch(err){
     console.error(err);
-    await wysFout("Kon nie stoor nie", "Die RSVP kon nie bygevoeg word nie" + (err.code ? " (" + esc(err.code) + ")" : "") + ".");
+    await wysFout("Could not save", "The RSVP could not be added" + (err.code ? " (" + esc(err.code) + ")" : "") + ".");
   }
 }
 
 async function wysigRsvp(id){
   const bestaande = huidigeRekords.find(r => r.id === id);
   if(!bestaande) return;
-  const data = await vraRsvpVorm("Wysig RSVP", bestaande);
+  const data = await vraRsvpVorm("Edit RSVP", bestaande);
   if(!data) return;
   try{
     if(fb){
@@ -292,10 +307,10 @@ async function wysigRsvp(id){
       if(!isNaN(i) && lys[i]){ lys[i] = { ...lys[i], ...data }; demoSave(lys); }
     }
     await herlaai();
-    await wysSukses("RSVP opgedateer", "Die veranderinge aan <strong>" + esc(data.naam) + " " + esc(data.van) + "</strong> is gestoor.", "Gestoor");
+    await wysSukses("RSVP updated", "The changes to <strong>" + esc(data.naam) + " " + esc(data.van) + "</strong> have been saved.", "Saved");
   }catch(err){
     console.error(err);
-    await wysFout("Kon nie opdateer nie", "Die veranderinge kon nie gestoor word nie" + (err.code ? " (" + esc(err.code) + ")" : "") + ".");
+    await wysFout("Could not update", "The changes could not be saved" + (err.code ? " (" + esc(err.code) + ")" : "") + ".");
   }
 }
 
@@ -304,9 +319,9 @@ async function verwyderRsvp(id){
   if(!bestaande) return;
   const naam = ((bestaande.naam || "") + " " + (bestaande.van || "")).trim();
   const seker = await vraBevestig(
-    "Verwyder hierdie RSVP?",
-    "Jy is op die punt om die RSVP van <strong>" + esc(naam) + "</strong> permanent te verwyder. Hierdie stap kan nie ongedaan gemaak word nie.",
-    "Ja, verwyder"
+    "Delete this RSVP?",
+    "You are about to permanently delete the RSVP for <strong>" + esc(naam) + "</strong>. This cannot be undone.",
+    "Delete"
   );
   if(!seker) return;
   try{
@@ -318,18 +333,18 @@ async function verwyderRsvp(id){
       if(!isNaN(i)){ lys.splice(i, 1); demoSave(lys); }
     }
     await herlaai();
-    await wysSukses("RSVP verwyder", "Die RSVP van <strong>" + esc(naam) + "</strong> is uit die lys verwyder.", "Verwyder");
+    await wysSukses("RSVP deleted", "The RSVP for <strong>" + esc(naam) + "</strong> has been removed from the list.", "Deleted");
   }catch(err){
     console.error(err);
-    await wysFout("Kon nie verwyder nie", "Die RSVP kon nie verwyder word nie" + (err.code ? " (" + esc(err.code) + ")" : "") + ".");
+    await wysFout("Could not delete", "The RSVP could not be deleted" + (err.code ? " (" + esc(err.code) + ")" : "") + ".");
   }
 }
 
 /* ---------- sign in / out ---------- */
 async function afterSignIn(user){
   if(!isAllowedAdmin(user.email)){
-    msg("Hierdie rekening (" + (user.email || "") + ") het nie admin-toegang nie.", false);
-    await wysFout("Geen admin-toegang nie", "Die rekening <strong>" + esc(user.email || "") + "</strong> is nie op die admin-lys nie.");
+    msg("This account (" + (user.email || "") + ") does not have admin access.", false);
+    await wysFout("No admin access", "The account <strong>" + esc(user.email || "") + "</strong> is not on the admin list.");
     try{ await fb.signOut(fb.auth); }catch(e){}
     showLogin();
     return;
@@ -339,7 +354,7 @@ async function afterSignIn(user){
 }
 
 async function meldAanMetGoogle(){
-  if(!fb){ msg("Firebase is nie gekonfigureer nie.", false); return; }
+  if(!fb){ msg("Firebase is not configured.", false); return; }
   clearMsg();
   const provider = new fb.GoogleProvider();
   provider.setCustomParameters({ prompt: "select_account" });
@@ -356,12 +371,12 @@ async function meldAanMetGoogle(){
       }catch(err2){
         console.error("Herlei-aanmelding het ook misluk:", err2.code, err2.message);
         msg(authFoutTeks(err2), false);
-        await wysFout("Google-aanmelding het misluk", esc(authFoutTeks(err2)));
+        await wysFout("Google login failed", esc(authFoutTeks(err2)));
         return;
       }
     }
     msg(authFoutTeks(err), false);
-    await wysFout("Google-aanmelding het misluk", esc(authFoutTeks(err)));
+    await wysFout("Google login failed", esc(authFoutTeks(err)));
   }
 }
 
@@ -379,7 +394,7 @@ function wireEvents(){
       e.preventDefault();
       const email = document.getElementById("a-epos").value.trim();
       const wag = document.getElementById("a-wag").value;
-      if(!email || !wag){ msg("Vul asseblief e-pos en wagwoord in.", false); return; }
+      if(!email || !wag){ msg("Please fill in your email and password.", false); return; }
       if(fb){
         try{
           const cred = await fb.signInEmail(fb.auth, email, wag);
@@ -406,8 +421,10 @@ function wireEvents(){
 
   if(rows){
     rows.addEventListener("click", (e) => {
-      const wysigId = e.target.getAttribute && e.target.getAttribute("data-wysig");
-      const verwyderId = e.target.getAttribute && e.target.getAttribute("data-verwyder");
+      const knoppie = e.target.closest ? e.target.closest("button") : null;
+      if(!knoppie) return;
+      const wysigId = knoppie.getAttribute("data-wysig");
+      const verwyderId = knoppie.getAttribute("data-verwyder");
       if(wysigId) wysigRsvp(wysigId);
       else if(verwyderId) verwyderRsvp(verwyderId);
     });
@@ -419,8 +436,8 @@ wireEvents();
 const note = document.getElementById("admin-config-note");
 if(note){
   note.textContent = FIREBASE_READY
-    ? "Meld aan met jou Google-rekening (of admin e-pos en wagwoord) om die RSVP-lys te sien."
-    : "Demo-modus: Firebase is nog nie gekonfigureer nie. Meld aan met enige e-pos en wagwoord om die plaaslike demo-antwoorde te sien.";
+    ? "Log in with your Google account (or the admin email and password) to see the RSVP list."
+    : "Demo mode: Firebase is not configured yet. Log in with any email and password to see the local demo responses.";
 }
 initFirebase().then(async (inst) => {
   if(inst && inst.auth){

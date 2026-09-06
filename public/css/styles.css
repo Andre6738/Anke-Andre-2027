@@ -459,3 +459,46 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
   .admin-stats .sl{font-size:.54rem;letter-spacing:.08em;}
   .rsvp-table td{grid-template-columns:42% 1fr;}
 }
+
+/* ---- dragkode en kleurinspirasie ---- */
+.dresscode{padding:88px 40px;text-align:center;background:var(--cream);border-top:1px solid var(--line);}
+.dc-lead{max-width:560px;margin:0 auto;color:var(--muted);}
+.dc-formal{margin-top:8px;font-size:.72rem;text-transform:uppercase;letter-spacing:.24em;color:var(--taupe-deep);}
+.dc-panel{max-width:760px;margin:44px auto 0;background:var(--ivory);border:1px solid var(--line);padding:44px 40px 40px;box-shadow:0 18px 44px rgba(68,84,60,.09);}
+.dc-panel .label{display:block;}
+.dc-title{font-size:2.1rem;line-height:1.15;margin-top:6px;color:var(--green-deep);}
+.dc-rule{width:64px;height:1px;background:var(--sage);margin:14px auto 0;}
+.dc-text{max-width:520px;margin:18px auto 0;color:var(--muted);font-size:.98rem;}
+
+/* Die swatches is die enigste ronde vorms op die webwerf, so hulle moet die
+   globale "skerp hoeke"-reel doelbewus oorskryf. */
+.dc-swatches{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;max-width:600px;margin:40px auto 0;}
+.dc-swatch{width:74px;height:74px;flex:0 0 auto;background:var(--k);border-radius:50% !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55), 0 8px 20px rgba(68,84,60,.16);
+  transition:transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s ease;}
+.dc-swatch:hover{transform:translateY(-5px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.7), 0 14px 28px rgba(68,84,60,.24);}
+.dc-note{max-width:540px;margin:38px auto 0;font-size:.82rem;font-style:italic;letter-spacing:.02em;color:var(--taupe-deep);line-height:1.7;}
+
+@media (prefers-reduced-motion: no-preference){
+  .dc-swatch.reveal{transition-delay:calc(var(--i,0) * 45ms);}
+}
+
+@media(max-width:760px){
+  .dresscode{padding:60px 22px;}
+  .dc-panel{padding:32px 20px 30px;margin-top:32px;}
+  .dc-title{font-size:1.8rem;}
+  .dc-swatches{gap:20px;margin-top:30px;}
+  .dc-swatch{width:70px;height:70px;}
+}
+
+/* Op 'n selfoon vloei die 17 kleure die netjieste in drie per ry (die laaste ry
+   twee), daarom die vaste maksimum breedte eerder as 'n los wikkeling. */
+@media(max-width:520px){
+  .dc-swatches{max-width:292px;}
+  .dc-swatch{width:74px;height:74px;}
+}
+
+@media(max-width:360px){
+  .dc-swatches{gap:16px;max-width:232px;}
+  .dc-swatch{width:64px;height:64px;}
+}

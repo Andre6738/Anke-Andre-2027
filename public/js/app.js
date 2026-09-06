@@ -355,7 +355,7 @@ firebaseGereed = initFirebase();
 (function(){
   if(!("IntersectionObserver" in window)) return;
   if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const sel = ".details .garland, .count .grid, .center-head, .tl-item, .cal-btn, .map-wrap, .map-actions, .photos .ph, .gift-card, .gift-lead, .gift-thanks, .faq-item, .rsvp .inner";
+  const sel = ".details .garland, .count .grid, .center-head, .tl-item, .cal-btn, .map-wrap, .map-actions, .dc-panel, .dc-swatch, .photos .ph, .gift-card, .gift-lead, .gift-thanks, .faq-item, .rsvp .inner";
   const els = [...document.querySelectorAll(sel)];
   els.forEach(el => el.classList.add("reveal"));
   const io = new IntersectionObserver((entries) => {

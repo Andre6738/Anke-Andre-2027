@@ -112,7 +112,7 @@ Of installeer die Firebase CLI en gebruik `firebase emulators:start` sodra die p
 
 - Admin-aanmelding is nou op 'n APARTE bladsy: `/admin` (public/admin/index.html).
   Dit is nie op die gaste-bladsy nie. Meld aan met Google of met e-pos/wagwoord.
-- Slegs e-posse in `ADMIN_EMAILS` (config.js) kry toegang. Firestore-reels laat
+- Slegs e-posse in `ADMIN_EMAILS` (config.js) kry toegang. Firestore-reëls laat
   ook net daardie e-pos toe om die `rsvps` te lees.
 - RSVP-vorm het nou 'n "Liedjie-voorstel" veld (`liedjie`); dit wys in die admin-lys.
 - "Plek" afdeling met 'n ingebedde Google Maps kaart en 'n "Maak oop in Google Maps"

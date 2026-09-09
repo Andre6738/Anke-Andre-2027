@@ -17,7 +17,7 @@ import { wysSukses, wysFout } from "./swal-tema.js?v=20260904b";
 ================================================================== */
 const WEDDING = {
   datum: "2027-08-28",            // 28 Augustus 2027 (bevestig)
-  tyd: "16:00",                   // Seremonie begin 16:00 (bevestig). Gaste gesit teen 15:30.
+  tyd: "16:00",                   // Seremonie begin 16:00 (bevestig). Gaste moet gesit wees teen 15:30.
   tydsoneOffset: "+02:00",        // SAST (Suid-Afrika, geen somertyd)
   duurUre: 5,                     // geskatte duur vir die kalender-gebeurtenis
   titel: "André en Anke se troue",

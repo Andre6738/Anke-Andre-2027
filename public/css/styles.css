@@ -186,7 +186,7 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
 .gift-row:last-child{border-bottom:0;}
 .gift-row .gk{font-size:.66rem;text-transform:uppercase;letter-spacing:.2em;color:var(--taupe-deep);align-self:center;}
 .gift-row .gv{font-family:'Cormorant Garamond',serif;font-size:1.15rem;text-align:right;}
-.gift-thanks{font-size:2.6rem;color:var(--green);margin-top:24px;}
+.gift-thanks{font-size:2rem;line-height:1;color:var(--green);margin-top:24px;}
 
 /* ---- admin bladsy ---- */
 .admin-page{max-width:1000px;margin:0 auto;padding:48px 22px 64px;min-height:100vh;}
@@ -218,7 +218,7 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
 }
 
 /* geskenke - verbeterde spasiering en bankkaart-styl */
-.gifts{padding:100px 40px 92px;}
+.gifts{padding:100px 40px 60px;}
 .gifts .center-head{margin-bottom:30px;}
 .gift-lead{margin-bottom:12px;}
 .gift-lead:last-of-type{margin-bottom:0;}
@@ -226,8 +226,8 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
 .gift-card-head{font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:.24em;font-size:.66rem;color:var(--taupe-deep);text-align:center;padding:18px 0 14px;border-bottom:1px solid var(--line);}
 .gift-row .gv.mono{font-family:'Jost',sans-serif;letter-spacing:.1em;font-size:1.02rem;font-weight:400;}
 .gift-example{margin-top:16px;font-size:.72rem;font-style:italic;color:var(--taupe-deep);letter-spacing:.04em;}
-.gift-thanks{margin-top:32px;}
-@media(max-width:760px){ .gifts{padding:66px 22px 60px;} .gift-card{padding:0 18px 8px;} }
+.gift-thanks{margin-top:26px;}
+@media(max-width:760px){ .gifts{padding:66px 22px 38px;} .gift-card{padding:0 18px 8px;} .gift-thanks{font-size:1.75rem;margin-top:22px;} }
 
 /* ---- tydlyn (ons vier oomblikke) ---- */
 .timeline{position:relative;max-width:940px;margin:0 auto;}

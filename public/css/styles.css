@@ -471,8 +471,8 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
 .dc-text{max-width:520px;margin:18px auto 0;color:var(--muted);font-size:.98rem;}
 
 /* Die swatches is die enigste ronde vorms op die webwerf, so hulle moet die
-   globale "skerp hoeke"-reel doelbewus oorskryf. Vyf kolomme gee die 15 kleure
-   'n gelyke 5x3-rooster op elke skermgrootte, sonder 'n halwe laaste ry. */
+   globale "skerp hoeke"-reel doelbewus oorskryf. Vyf kolomme gee die 10 kleure
+   'n gelyke 5x2-rooster op elke skermgrootte, sonder 'n halwe laaste ry. */
 .dc-swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;max-width:352px;margin:34px auto 0;}
 .dc-swatch{width:100%;aspect-ratio:1;background:var(--k);border-radius:50% !important;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.55), 0 5px 13px rgba(68,84,60,.15);

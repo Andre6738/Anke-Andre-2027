@@ -501,11 +501,8 @@ footer .fd{font-size:.8rem;letter-spacing:.06em;}
 .stay-card{background:#fff;border:1px solid var(--line);padding:32px 30px 30px;box-shadow:0 18px 44px rgba(68,84,60,.09);}
 .stay-name{font-size:2rem;line-height:1.15;color:var(--green-deep);}
 .stay-rule{width:64px;height:1px;background:var(--sage);margin:14px auto 0;}
-.stay-actions{display:flex;flex-direction:column;gap:10px;margin-top:24px;}
-.stay-btn{display:block;text-decoration:none;padding:14px 18px;border:1px solid #d8ccb4;background:#fff;color:var(--ink);font-family:'Jost',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.22em;transition:background .2s,border-color .2s,color .2s;}
+.stay-btn{display:block;margin-top:24px;text-decoration:none;padding:14px 18px;border:1px solid #d8ccb4;background:#fff;color:var(--ink);font-family:'Jost',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.22em;transition:background .2s,border-color .2s,color .2s;}
 .stay-btn:hover{border-color:var(--green);color:var(--green-deep);}
-.stay-btn.primary{background:var(--green-deep);border-color:var(--green-deep);color:var(--ivory);}
-.stay-btn.primary:hover{background:var(--green);border-color:var(--green);color:var(--ivory);}
 .stay-btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--sage);}
 
 @media(min-width:761px){

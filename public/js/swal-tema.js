@@ -20,7 +20,7 @@ const BASIESE_KLASSE = {
 
 const ETIKETTE = {
   suksesEyebrow: "Dankie",
-  suksesKnoppie: "Toemaar, dankie",
+  suksesKnoppie: "Wonderlik, dankie",
   foutEyebrow: "Ai tog",
   foutKnoppie: "Probeer weer",
   infoEyebrow: "Let wel",

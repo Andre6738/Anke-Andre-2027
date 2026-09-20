@@ -6,7 +6,7 @@
    Geen em-strepe. Afrikaans.
 ------------------------------------------------------------------ */
 
-import { wysSukses, wysFout } from "./swal-tema.js?v=20260904b";
+import { wysSukses, wysFout } from "./swal-tema.js?v=20260920";
 
 /* ==================================================================
    ENIGSTE PLEK OM DIE TROUE-BESONDERHEDE TE VERANDER
